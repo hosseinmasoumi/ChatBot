@@ -1,6 +1,0 @@
-{
-  "name": "چت بات دانشگاه آزاد",
-  "description": "An intelligent AI assistant designed to guide and support first-year university students with their academic and administrative questions.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

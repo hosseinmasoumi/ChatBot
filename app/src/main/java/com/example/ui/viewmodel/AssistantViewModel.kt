@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -130,22 +131,21 @@ class AssistantViewModel(application: Application) : AndroidViewModel(applicatio
     init {
         // Seed an initial welcome message if history is empty
         viewModelScope.launch {
-            chatDao.getAllMessages().collect { list ->
-                if (list.isEmpty()) {
-                    val welcomeMsg = ChatMessageEntity(
-                        sender = "assistant",
-                        text = "سلام! به دانشگاه خوش آمدید. 🎓✨\n" +
-                                "من دستیار هوشمند شما (Uni AI Assistant) برای پاسخ به تمام سوالات آموزشی و دانشجویی شما هستم.\n\n" +
-                                "شما می‌توانید سوالاتی در زمینه‌های زیر از من بپرسید:\n" +
-                                "● ثبت‌نام و پذیرش: «شرایط ثبت‌نام نهایی نودانشجویان چیست؟»\n" +
-                                "● انتخاب واحد: «چطور می‌توانم در سیستم گلستان انتخاب واحد کنم؟»\n" +
-                                "● امتحانات: «در صورت غیبت در امتحان پایانی چه اتفاقی می‌افتد؟»\n" +
-                                "● امور مالی: «شرایط اقساطی کردن شهریه یا دریافت وام دانشجویی چیست؟»\n" +
-                                "● خوابگاه و غذا: «چگونه می‌توانم خوابگاه و ژتون غذای سلف را رزرو کنم؟»\n\n" +
-                                "چه سوالی در ذهن دارید؟ با من در میان بگذارید! 😊👇"
-                    )
-                    chatDao.insertMessage(welcomeMsg)
-                }
+            val list = chatDao.getAllMessages().first()
+            if (list.isEmpty()) {
+                val welcomeMsg = ChatMessageEntity(
+                    sender = "assistant",
+                    text = "سلام! به دانشگاه خوش آمدید. 🎓✨\n" +
+                            "من دستیار هوشمند شما (Uni AI Assistant) برای پاسخ به تمام سوالات آموزشی و دانشجویی شما هستم.\n\n" +
+                            "شما می‌توانید سوالاتی در زمینه‌های زیر از من بپرسید:\n" +
+                            "● ثبت‌نام و پذیرش: «شرایط ثبت‌نام نهایی نودانشجویان چیست؟»\n" +
+                            "● انتخاب واحد: «چطور می‌توانم در سیستم گلستان انتخاب واحد کنم؟»\n" +
+                            "● امتحانات: «در صورت غیبت در امتحان پایانی چه اتفاقی می‌افتد؟»\n" +
+                            "● امور مالی: «شرایط اقساطی کردن شهریه یا دریافت وام دانشجویی چیست؟»\n" +
+                            "● خوابگاه و غذا: «چگونه می‌توانم خوابگاه و ژتون غذای سلف را رزرو کنم؟»\n\n" +
+                            "چه سوالی در ذهن دارید؟ با من در میان بگذارید! 😊👇"
+                )
+                chatDao.insertMessage(welcomeMsg)
             }
         }
     }
